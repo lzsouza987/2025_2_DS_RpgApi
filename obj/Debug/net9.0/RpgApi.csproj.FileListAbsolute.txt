@@ -31,3 +31,4 @@ D:\Local\2DS\DS\A05\RpgApi\obj\Debug\net9.0\refint\RpgApi.dll
 D:\Local\2DS\DS\A05\RpgApi\obj\Debug\net9.0\RpgApi.pdb
 D:\Local\2DS\DS\A05\RpgApi\obj\Debug\net9.0\RpgApi.genruntimeconfig.cache
 D:\Local\2DS\DS\A05\RpgApi\obj\Debug\net9.0\ref\RpgApi.dll
+D:\Local\2DS\DS\A05\RpgApi\obj\Debug\net9.0\RpgApi.sourcelink.json
