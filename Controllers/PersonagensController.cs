@@ -7,9 +7,13 @@ using RpgApi.Data;
 using Microsoft.EntityFrameworkCore;
 using RpgApi.Models;
 using RpgApi.Models.Enuns;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using RpgApi.Extensions;
 
 namespace RpgApi.Controllers
 {
+    [Authorize(Roles="Jogador, Admin")]
     [ApiController]
     [Route("[controller]")]
     public class PersonagensController : ControllerBase
@@ -60,6 +64,9 @@ namespace RpgApi.Controllers
         {
             try
             {
+                novoPersonagem.Usuario = _context
+                        .TB_USUARIOS.FirstOrDefault(uBusca => uBusca.Id == User.UsuarioId());
+
                 await _context.TB_PERSONAGENS.AddAsync(novoPersonagem);
                 await _context.SaveChangesAsync();
 
@@ -75,7 +82,10 @@ namespace RpgApi.Controllers
         public async Task<IActionResult> Update(Personagem novoPersonagem)
         {
             try
-            {                
+            {
+                novoPersonagem.Usuario = _context
+                        .TB_USUARIOS.FirstOrDefault(uBusca => uBusca.Id == User.UsuarioId());
+                           
                 _context.TB_PERSONAGENS.Update(novoPersonagem);
                 int linhasAfetadas = await _context.SaveChangesAsync();
 
@@ -232,7 +242,7 @@ namespace RpgApi.Controllers
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message + " - " + ex.InnerException);
             }
         }
 
@@ -254,26 +264,66 @@ namespace RpgApi.Controllers
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message + " - " + ex.InnerException);
             }
-        } 
-        
-        [HttpGet("GetByNomeAproximado/{nomePersonagem}")] 
-        public async Task<IActionResult> GetByNomeAproximado(string nomePersonagem) 
-        { 
-            try 
-            { 
-                List<Personagem> lista = await _context.TB_PERSONAGENS 
-                    .Where(p => p.Nome.ToLower().Contains(nomePersonagem.ToLower())) 
-                    .ToListAsync(); 
- 
-                return Ok(lista); 
-            } 
-            catch (System.Exception ex) 
-            { 
-                return BadRequest(ex.Message); 
-            } 
-        } 
+        }
+
+        [HttpGet("GetByNomeAproximado/{nomePersonagem}")]
+        public async Task<IActionResult> GetByNomeAproximado(string nomePersonagem)
+        {
+            try
+            {
+                List<Personagem> lista = await _context.TB_PERSONAGENS
+                    .Where(p => p.Nome.ToLower().Contains(nomePersonagem.ToLower()))
+                    .ToListAsync();
+
+                return Ok(lista);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message + " - " + ex.InnerException);
+            }
+        }
+
+        [HttpGet("GetByUser")]
+        public async Task<IActionResult> GetByUserAsync()
+        {
+            try
+            {
+                int id = User.UsuarioId();
+
+                List<Personagem> lista = await _context.TB_PERSONAGENS
+                    .Where(u => u.Usuario.Id == id).ToListAsync();
+
+                return Ok(lista);
+
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message + " - " + ex.InnerException);
+            }
+        }
+
+        [HttpGet("GetByPerfil")]
+        public async Task<IActionResult> GetByPerfilAsync()
+        {
+            try
+            {
+                List<Personagem> lista = new List<Personagem>();
+
+                if (User.UsuarioPerfil() == "Admin")
+                    lista = await _context.TB_PERSONAGENS.ToListAsync();
+                else
+                    lista = await _context
+                        .TB_PERSONAGENS.Where(p => p.Usuario.Id == User.UsuarioId()).ToListAsync();
+
+                return Ok(lista);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message + " - " + ex.InnerException);
+            }
+        }
 
 
 

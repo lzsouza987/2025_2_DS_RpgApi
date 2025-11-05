@@ -693,3 +693,4 @@ D:\Work\Etec\2025-2_2DS_DS\RpgApi\bin\Debug\net9.0\Microsoft.AspNetCore.JsonPatc
 D:\Work\Etec\2025-2_2DS_DS\RpgApi\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\Work\Etec\2025-2_2DS_DS\RpgApi\bin\Debug\net9.0\Newtonsoft.Json.dll
 D:\Work\Etec\2025-2_2DS_DS\RpgApi\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll
+D:\Work\Etec\2025-2_2DS_DS\RpgApi\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
